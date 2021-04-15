@@ -19,6 +19,21 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get Contact by ID
+router.get('/:id', async (req, res) => {
+  try {
+    let contact = await Contact.findOne({_id:req.params.id});
+    if (!contact) throw Error('Error');
+
+    res.status(200).json({
+      contact,
+      message: "Success",
+    });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
 // POST a new Contact
 
 router.post('/', auth, async (req, res) => {
