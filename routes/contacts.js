@@ -2,6 +2,8 @@ import express from 'express';
 import Contact from '../models/Contact';
 import auth from '../middleware/auth';
 
+// TODO: Link Contact to User, then make routes private by adding the middleware
+
 const router = express.Router();
 
 // Get All Contacts
@@ -22,12 +24,12 @@ router.get('/', async (req, res) => {
 // Get Contact by ID
 router.get('/:id', async (req, res) => {
   try {
-    let contact = await Contact.findOne({_id:req.params.id});
+    let contact = await Contact.findOne({ _id: req.params.id });
     if (!contact) throw Error('Error');
 
     res.status(200).json({
       contact,
-      message: "Success",
+      message: 'Success',
     });
   } catch (error) {
     res.status(500).json({ error });
@@ -39,9 +41,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', auth, async (req, res) => {
   try {
     const { firstName, lastName, phoneNumber, email } = req.body;
-    console.log(req.body);
     let newContact = new Contact({ firstName, lastName, phoneNumber, email });
-
     await newContact.save();
     res.status(200).json({
       new_contact: newContact,
